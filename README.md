@@ -19,7 +19,7 @@ pre-start script
 end script
 
 post-stop script
-  netns-deamon-start daemon
+  netns-deamon-stop daemon
 end script
 
 script
