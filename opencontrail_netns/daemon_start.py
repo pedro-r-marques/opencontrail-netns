@@ -75,4 +75,4 @@ def daemon_start():
 
 
 if __name__ == '__main__':
-    deamon_start()
+    daemon_start()
