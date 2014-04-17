@@ -102,7 +102,7 @@ class NetworkManager(object):
                 sys.exit(1)
 
         try:
-            rt_obj = self._client.route_target_read(fq_name=rtarget_str)
+            rt_obj = self._client.route_target_read(fq_name=rtarget_str.split(':'))
         except NoIdError:
             rt_obj = RouteTarget(rtarget_str)
             self._client.route_target_create(rt_obj)
