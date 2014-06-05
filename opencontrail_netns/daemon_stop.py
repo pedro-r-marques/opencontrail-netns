@@ -21,7 +21,7 @@ def daemon_stop():
     parser.add_argument("-s", "--api-server", help="API server address")
     parser.add_argument("-p", "--api-port", type=int, help="API server port")
     parser.add_argument("daemon", help="Deamon Name")
-    arguments = parser.parse_args(sys.argv)
+    arguments = parser.parse_args(sys.argv[1:])
 
     manager = LxcManager()
     provisioner = Provisioner(api_server=arguments.api_server,
