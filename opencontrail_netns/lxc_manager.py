@@ -89,6 +89,7 @@ class LxcManager(object):
                           (daemon, ifname_guest))
 
     def clear_interfaces(self, daemon):
+        shell_command('ip netns exec ns-%s dhclient -r' % daemon)
         output = shell_command('ip netns exec ns-%s ip link list' % daemon)
         for line in output.split('\n'):
             m = re.match(r'^[\d]+: ([\w]+):', line)

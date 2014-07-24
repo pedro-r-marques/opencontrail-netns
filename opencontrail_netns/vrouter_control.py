@@ -5,11 +5,11 @@ import logging
 import socket
 
 from contrail_lib import rpc_client_instance, uuid_from_string
-import nova_contrail_vif.gen_py.instance_service
+import contrail_vrouter_api.gen_py.instance_service
 
 
 def add_interface(interface_name, vmi, vm, mac):
-    from nova_contrail_vif.gen_py.instance_service import ttypes
+    from contrail_vrouter_api.gen_py.instance_service import ttypes
     data = ttypes.Port(
         uuid_from_string(vmi),
         uuid_from_string(vm),
