@@ -27,11 +27,15 @@ class LxcManager(object):
             return 'instance%d' % i
         return None
 
-    def create_interface(self, daemon, ifname_instance):
+    def create_interface(self, nsname, ifname_instance, vmi=None):
         ifname_master = self._interface_generate_unique_name()
         shell_command('ip link add %s type veth peer name %s' %
                       (ifname_instance, ifname_master))
-        shell_command('ip link set %s netns ns-%s' % (ifname_instance, daemon))
+        if vmi:
+            mac = vmi.virtual_machine_interface_mac_addresses.mac_address[0]
+            shell_command('ifconfig %s hw ether %s' % (ifname_instance, mac))
+
+        shell_command('ip link set %s netns %s' % (ifname_instance, nsname))
         shell_command('ip link set %s up' % ifname_master)
         return ifname_master
 
@@ -60,7 +64,7 @@ class LxcManager(object):
         """
         output = shell_command('ip netns exec ns-%s ip link list' % daemon)
         if not self._interface_list_contains(output, ifname_instance):
-            ifname_master = self.create_interface(daemon, ifname_instance)
+            ifname_master = self.create_interface('ns-%s' % daemon, ifname_instance)
         else:
             ifname_master = self._get_master_ifname(daemon, ifname_instance)
 
