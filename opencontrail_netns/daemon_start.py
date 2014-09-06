@@ -34,6 +34,7 @@ def daemon_start():
     parser.set_defaults(**defaults)
     parser.add_argument("-s", "--api-server", help="API server address")
     parser.add_argument("-p", "--api-port", type=int, help="API server port")
+    parser.add_argument("--project", help="OpenStack project name")
     parser.add_argument("-n", "--network", help="Primary network")
     parser.add_argument("-o", "--outbound", help="Outbound traffic network")
     parser.add_argument("daemon", help="Deamon Name")
