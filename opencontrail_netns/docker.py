@@ -9,7 +9,7 @@ import sys
 
 from instance_provisioner import Provisioner
 from lxc_manager import LxcManager
-from vrouter_control import interface_register
+from vrouter_control import interface_register, interface_unregister
 
 def build_network_name(project_name, network_name):
     if network_name.find(':') >= 0:
@@ -56,6 +56,22 @@ def main():
         interface_register(vm, vmi, ifname)
         subprocess.check_output(
             'ip netns exec %s dhclient veth0' % args.container_id, shell=True)
+    elif args.stop:
+        vm = provisioner.virtual_machine_lookup(instance_name)
+
+        vmi_list = vm.get_virtual_machine_interfaces()
+        for ref in vmi_list:
+            uuid = ref['uuid']
+            interface_unregister(uuid)
+
+        manager.clear_interfaces(args.container_id)
+
+        for ref in vmi_list:
+            provisioner.vmi_delete(ref['uuid'])
+
+        provisioner.virtual_machine_delete(vm)
+        subprocess.check_output(
+            'ip netns delete %s' % args.container_id, shell=True)
 
 if __name__ == '__main__':
     main()

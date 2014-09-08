@@ -34,7 +34,7 @@ def daemon_stop():
         uuid = ref['uuid']
         interface_unregister(uuid)
 
-    manager.clear_interfaces(arguments.daemon)
+    manager.clear_interfaces('ns-%s' % arguments.daemon)
 
     for ref in vmi_list:
         provisioner.vmi_delete(ref['uuid'])

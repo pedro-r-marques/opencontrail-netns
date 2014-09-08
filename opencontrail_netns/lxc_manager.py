@@ -92,17 +92,17 @@ class LxcManager(object):
                           '"echo 2 >/proc/sys/net/ipv4/conf/%s/rp_filter"' %
                           (daemon, ifname_guest))
 
-    def clear_interfaces(self, daemon):
-        shell_command('ip netns exec ns-%s dhclient -r' % daemon)
-        output = shell_command('ip netns exec ns-%s ip link list' % daemon)
+    def clear_interfaces(self, nsname):
+        shell_command('ip netns exec %s dhclient -r' % nsname)
+        output = shell_command('ip netns exec %s ip link list' % nsname)
         for line in output.split('\n'):
             m = re.match(r'^[\d]+: ([\w]+):', line)
             if m:
                 ifname = m.group(1)
                 if ifname == 'lo':
                     continue
-                shell_command('ip netns exec ns-%s ip link delete %s' %
-                              (daemon, ifname))
+                shell_command('ip netns exec %s ip link delete %s' %
+                              (nsname, ifname))
 
     def namespace_init(self, daemon):
         output = shell_command('ip netns list')
